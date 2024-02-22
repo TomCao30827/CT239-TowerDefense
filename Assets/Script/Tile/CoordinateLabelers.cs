@@ -8,12 +8,17 @@ namespace BaseTowerDefense
     [ExecuteAlways]
     public class CoordinateLabelers : MonoBehaviour
     {
+        [SerializeField] private Color defaultColor = Color.white;
+        [SerializeField] private Color blockedColor = Color.red;
+
         private TextMeshPro label;
         private Vector2Int coordinate = new Vector2Int();
+        private Waypoint waypoint;
 
         private void Awake()
         {
             label = GetComponent<TextMeshPro>();
+            waypoint = GetComponentInParent<Waypoint>();
             DisplayCoordinate();
         }
 
@@ -25,6 +30,35 @@ namespace BaseTowerDefense
                 DisplayCoordinate();
                 UpdateObjectName();
             }
+            ColorCoordinate();
+            ToggleCoordinate();
+        }
+
+        /// <summary>
+        /// Toggle the tile's label on the space key
+        /// </summary>
+        private void ToggleCoordinate()
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                label.enabled = !label.IsActive();
+            }
+        }
+
+        /// <summary>
+        /// Set color of tile's label base on it's state
+        /// </summary>
+        private void ColorCoordinate()
+        {
+            if (waypoint.IsPlacable)
+            {
+                label.color = defaultColor;
+            }
+            else
+            {
+                label.color = blockedColor;
+            } 
+                
         }
 
         /// <summary>
