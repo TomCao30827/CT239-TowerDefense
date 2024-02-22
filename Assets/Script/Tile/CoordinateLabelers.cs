@@ -54,7 +54,7 @@ namespace BaseTowerDefense
             {
                 label.color = defaultColor;
             }
-            else
+            else if (!waypoint.IsPlacable) 
             {
                 label.color = blockedColor;
             } 
