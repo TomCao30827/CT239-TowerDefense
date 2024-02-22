@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 namespace BaseTowerDefense
@@ -9,10 +10,30 @@ namespace BaseTowerDefense
         [SerializeField] private List<Waypoint> path = new List<Waypoint>();
         [SerializeField] [Range(0.0f, 5.0f)] private float speed = 1.0f;
 
-        void Start()
+        private void OnEnable()
         {
+            FindPath();
+            ReturnToStart();
             StartCoroutine(FollowPath());
         }
+
+        private void ReturnToStart()
+        {
+            this.transform.position = path[0].transform.position;
+        }
+
+        private void FindPath() 
+        { 
+            path.Clear();
+
+            GameObject[] waypoints = GameObject.FindGameObjectsWithTag("Path");
+
+            foreach (var waypoint in waypoints)
+            {
+                path.Add(waypoint.GetComponent<Waypoint>());
+            }
+        }
+
 
         /// <summary>
         /// Move the enemy by lerping to each tile
@@ -35,6 +56,7 @@ namespace BaseTowerDefense
                     yield return new WaitForEndOfFrame();
                 }
             }
+            gameObject.SetActive(false);
         }
     }
 }

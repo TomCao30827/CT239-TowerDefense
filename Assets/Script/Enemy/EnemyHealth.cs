@@ -20,12 +20,16 @@ namespace BaseTowerDefense
             ProcessHit();
         }
 
+        /// <summary>
+        /// Disable an enemy when it has received enough hits
+        /// </summary>
+
         private void ProcessHit()
         {
             currentHitPoint--;
             if (currentHitPoint < 1)
             {
-                Destroy(gameObject);
+                gameObject.SetActive(false);
             }
         }
     }
