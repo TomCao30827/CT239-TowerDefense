@@ -6,16 +6,27 @@ namespace BaseTowerDefense
 {
     public class Enemy : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
+        [SerializeReference] private int goldReward = 25;
+        [SerializeReference] private int goldPenalty = 25;
+
+        Bank bank;
+
+        private void Start()
         {
-        
+            bank = FindObjectOfType<Bank>();
         }
 
-        // Update is called once per frame
-        void Update()
+        public void RewardGold()
         {
-        
+            if (bank == null) { return; }
+
+            bank.Deposit(goldReward);
+        }
+
+        public void StealGold()
+        {
+            if (bank == null) { return; }
+            bank.Withdraw(goldPenalty);
         }
     }
 }

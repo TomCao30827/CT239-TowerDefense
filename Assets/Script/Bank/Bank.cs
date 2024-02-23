@@ -1,21 +1,42 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace BaseTowerDefense
 {
     public class Bank : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
+        [SerializeField] private int startinBalance= 150;
+        [SerializeField] private int currentBalance;
+
+        public int CurrentBalance { get { return currentBalance; } }
+
+        private void Awake()
         {
-        
+            currentBalance = startinBalance;
         }
 
-        // Update is called once per frame
-        void Update()
+        public void Deposit(int amount)
         {
-        
+            currentBalance += amount;
         }
+
+        public void Withdraw(int amount)
+        {
+            currentBalance -= amount;
+
+            if (currentBalance < 0)
+            {
+                ReloadScene();
+            }
+        }
+
+        private void ReloadScene()
+        {
+            Scene currentScene = SceneManager.GetActiveScene();
+            SceneManager.LoadScene(currentScene.buildIndex);
+        }
+
     }
 }

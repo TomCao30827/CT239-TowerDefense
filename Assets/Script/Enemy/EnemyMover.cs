@@ -10,6 +10,13 @@ namespace BaseTowerDefense
         [SerializeField] private List<Waypoint> path = new List<Waypoint>();
         [SerializeField] [Range(0.0f, 5.0f)] private float speed = 1.0f;
 
+        private Enemy enemy;
+
+        private void Start()
+        {
+            enemy = GetComponent<Enemy>();
+        }
+
         private void OnEnable()
         {
             FindPath();
@@ -57,6 +64,7 @@ namespace BaseTowerDefense
                 }
             }
             gameObject.SetActive(false);
+            enemy.StealGold();
         }
     }
 }

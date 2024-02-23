@@ -6,8 +6,9 @@ namespace BaseTowerDefense
 {
     public class Waypoint : MonoBehaviour
     {
-        [SerializeField] private GameObject tower;
+        [SerializeField] private Tower towerPrefab;
         [SerializeField] private bool isPlacable = true;
+
 
         public bool IsPlacable { get { return isPlacable; } }
 
@@ -23,8 +24,8 @@ namespace BaseTowerDefense
         {
             if (isPlacable)
             {
-                Instantiate(tower, this.transform.position, Quaternion.identity);
-                isPlacable = false;
+                bool hasPlaced = towerPrefab.CreateTower(towerPrefab, this.transform.position);
+                isPlacable = !hasPlaced; 
             }
         }
     }

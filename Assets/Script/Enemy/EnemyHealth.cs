@@ -9,7 +9,14 @@ namespace BaseTowerDefense
         [SerializeField] private int maxHitPoint = 5;
         [SerializeField] private int currentHitPoint;
 
+        private Enemy enemy;
+
         private void Start ()
+        {
+            enemy = GetComponent<Enemy>();
+        }
+
+        private void OnEnable ()
         {
             currentHitPoint = maxHitPoint;
         }
@@ -30,6 +37,7 @@ namespace BaseTowerDefense
             if (currentHitPoint < 1)
             {
                 gameObject.SetActive(false);
+                enemy.RewardGold();
             }
         }
     }
