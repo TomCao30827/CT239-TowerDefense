@@ -24,11 +24,17 @@ namespace BaseTowerDefense
             StartCoroutine(FollowPath());
         }
 
+        /// <summary>
+        /// Make the enemy appear at the start of the path when it's enabled
+        /// </summary>
         private void ReturnToStart()
         {
             this.transform.position = path[0].transform.position;
         }
 
+        /// <summary>
+        /// Create a path by adding all tiles with tag "path"
+        /// </summary>
         private void FindPath() 
         { 
             path.Clear();

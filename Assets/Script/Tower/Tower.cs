@@ -20,8 +20,8 @@ namespace BaseTowerDefense
             if (bank.CurrentBalance >= cost)
             {
                 Instantiate(towerPrefab, position, Quaternion.identity);
-                return true;
                 bank.Withdraw(cost);
+                return true;
             }
 
             return false;
