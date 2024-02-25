@@ -4,10 +4,14 @@ using UnityEngine;
 
 namespace BaseTowerDefense
 {
+    [RequireComponent(typeof(Enemy))]
     public class EnemyHealth : MonoBehaviour
     {
         [SerializeField] private int maxHitPoint = 5;
         [SerializeField] private int currentHitPoint;
+
+        [Tooltip("Add hit point whenever enemy is destroyed by player's tower")]
+        [SerializeField] private int extendHitPoint = 1;
 
         private Enemy enemy;
 
@@ -37,6 +41,7 @@ namespace BaseTowerDefense
             if (currentHitPoint < 1)
             {
                 gameObject.SetActive(false);
+                currentHitPoint += extendHitPoint;
                 enemy.RewardGold();
             }
         }
