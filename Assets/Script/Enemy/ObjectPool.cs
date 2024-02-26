@@ -4,11 +4,12 @@ using UnityEngine;
 
 namespace BaseTowerDefense
 {
+
     public class ObjectPool : MonoBehaviour
     {
         [SerializeField] private GameObject enemyPrefab;
-        [SerializeField] private float delay = 2.0f;
-        [SerializeField] private int poolSize = 6;
+        [SerializeField] [Range(0.1f, 5.0f)] private float delay = 2.0f;
+        [SerializeField] [Range(0, 20)]private int poolSize = 6;
 
         private GameObject[] pool;
 

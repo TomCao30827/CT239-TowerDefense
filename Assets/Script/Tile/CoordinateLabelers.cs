@@ -6,6 +6,7 @@ using UnityEngine;
 namespace BaseTowerDefense
 {
     [ExecuteAlways]
+    [RequireComponent(typeof(TextMeshPro))]
     public class CoordinateLabelers : MonoBehaviour
     {
         [SerializeField] private Color defaultColor = Color.white;
@@ -18,6 +19,8 @@ namespace BaseTowerDefense
         private void Awake()
         {
             label = GetComponent<TextMeshPro>();
+            label.enabled = false;
+
             waypoint = GetComponentInParent<Waypoint>();
             DisplayCoordinate();
         }
@@ -29,6 +32,7 @@ namespace BaseTowerDefense
             {
                 DisplayCoordinate();
                 UpdateObjectName();
+                label.enabled = true;
             }
             ColorCoordinate();
             ToggleCoordinate();

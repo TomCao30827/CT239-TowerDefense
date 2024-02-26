@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace BaseTowerDefense
 {
+    [RequireComponent(typeof(Enemy))]
     public class EnemyMover : MonoBehaviour
     {
         [SerializeField] private List<Waypoint> path = new List<Waypoint>();
@@ -33,20 +34,30 @@ namespace BaseTowerDefense
         }
 
         /// <summary>
-        /// Create a path by adding all tiles with tag "path"
+        /// Create a path by adding all child object's transform in Path obj
         /// </summary>
         private void FindPath() 
         { 
             path.Clear();
 
-            GameObject[] waypoints = GameObject.FindGameObjectsWithTag("Path");
+            GameObject pathObj = GameObject.FindGameObjectWithTag("Path");
 
-            foreach (var waypoint in waypoints)
+            foreach (Transform child in pathObj.transform) // Cant use be pathObj directly because gameObject is not IEnumerable
             {
-                path.Add(waypoint.GetComponent<Waypoint>());
+                Waypoint waypoint = child.GetComponent<Waypoint>();
+
+                if (child != null)
+                {
+                    path.Add(waypoint);
+                }
             }
         }
 
+        private void FinishPath()
+        {
+            gameObject.SetActive(false);
+            enemy.StealGold();
+        }
 
         /// <summary>
         /// Move the enemy by lerping to each tile
@@ -69,8 +80,7 @@ namespace BaseTowerDefense
                     yield return new WaitForEndOfFrame();
                 }
             }
-            gameObject.SetActive(false);
-            enemy.StealGold();
+            FinishPath();
         }
     }
 }
