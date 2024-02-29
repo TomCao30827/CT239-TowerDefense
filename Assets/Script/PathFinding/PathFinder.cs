@@ -1,20 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Apple;
 
 namespace BaseTowerDefense
 { 
     public class PathFinder : MonoBehaviour
     {
-        [SerializeField] private Vector2Int startCoordinates;
-        [SerializeField] private Vector2Int endCoordinates;
+        [SerializeField] private Vector2Int startCoordinate;
+        [SerializeField] private Vector2Int endCoordinate;
         [SerializeField] private Node startNode;
         [SerializeField] private Node endNode;
         [SerializeField] private Node currentNode;
 
-        Queue<Node> frontier = new Queue<Node>();
-        Dictionary<Vector2Int, Node> reached = new Dictionary<Vector2Int, Node>();
-
+        private Queue<Node> frontier = new Queue<Node>();
+        private Dictionary<Vector2Int, Node> reached = new Dictionary<Vector2Int, Node>();
         private Vector2Int[] directions = { Vector2Int.right, Vector2Int.left, Vector2Int.up, Vector2Int.down };
         private GridManager gridManager;
         private Dictionary<Vector2Int, Node> grid = new Dictionary<Vector2Int, Node>();
@@ -31,9 +31,16 @@ namespace BaseTowerDefense
 
         private void Start()
         {
+            startNode = gridManager.Grid[startCoordinate];
+            endNode = gridManager.Grid[endCoordinate];
+
             BFS();
+            BuildPath();
         }
 
+        /// <summary>
+        /// Finding it's neighbor 
+        /// </summary>
         private void ExploreNeighbors()
         {
             List<Node> neighbors = new List<Node>();
@@ -52,29 +59,53 @@ namespace BaseTowerDefense
             {
                 if (!reached.ContainsKey(neighbor.coordinates) && neighbor.isWalkable)
                 {
+                    neighbor.connectedTo = currentNode;
                     reached.Add(neighbor.coordinates, neighbor);
                     frontier.Enqueue(neighbor);
                 }
             }
         }
-
+        
+        /// <summary>
+        /// Breadth first search
+        /// </summary>
         private void BFS()
         {
             bool isRunning = true;
 
             frontier.Enqueue(startNode);
-            reached.Add(startCoordinates, startNode);
+            reached.Add(startCoordinate, startNode);
 
             while (frontier.Count > 0 && isRunning)
             {
                 currentNode = frontier.Dequeue();
                 currentNode.isExplored = true;
                 ExploreNeighbors();
-                if (currentNode.coordinates == endCoordinates)
+                if (currentNode.coordinates == endCoordinate)
                 {
                     isRunning = false;
                 }
             }
+        }
+
+        private List<Node> BuildPath()
+        {
+            List<Node> path = new List<Node>();
+            Node currentNode = endNode;
+
+            path.Add(currentNode);
+            currentNode.isPath = true;
+
+            while (currentNode.connectedTo != null)
+            {
+                currentNode = currentNode.connectedTo;
+                path.Add(currentNode);
+                currentNode.isPath = true;
+            }
+
+            path.Reverse();
+
+            return path;
         }
     }
 }
