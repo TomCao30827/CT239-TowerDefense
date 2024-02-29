@@ -8,7 +8,7 @@ namespace BaseTowerDefense
     [RequireComponent(typeof(Enemy))]
     public class EnemyMover : MonoBehaviour
     {
-        [SerializeField] private List<Waypoint> path = new List<Waypoint>();
+        [SerializeField] private List<Tile> path = new List<Tile>();
         [SerializeField] [Range(0.0f, 5.0f)] private float speed = 1.0f;
 
         private Enemy enemy;
@@ -44,7 +44,7 @@ namespace BaseTowerDefense
 
             foreach (Transform child in pathObj.transform) // Cant use be pathObj directly because gameObject is not IEnumerable
             {
-                Waypoint waypoint = child.GetComponent<Waypoint>();
+                Tile waypoint = child.GetComponent<Tile>();
 
                 if (child != null)
                 {

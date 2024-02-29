@@ -17,6 +17,7 @@ namespace BaseTowerDefense
         private TextMeshPro label;
         private Vector2Int coordinate = new Vector2Int();
         private GridManager gridManager;
+        private int unityGridSpacing = 10;
 
         private void Awake()
         {
@@ -24,7 +25,6 @@ namespace BaseTowerDefense
             label = GetComponent<TextMeshPro>();
             //label.enabled = false;
 
-            //waypoint = GetComponentInParent<Waypoint>();
             DisplayCoordinate();
         }
 
@@ -78,6 +78,7 @@ namespace BaseTowerDefense
                 label.color = exploredColor;
             }
 
+
             else
             {
                 label.color = defaultColor;
@@ -90,8 +91,8 @@ namespace BaseTowerDefense
         /// </summary>
         private void DisplayCoordinate()
         {
-            coordinate.x = Mathf.RoundToInt(transform.parent.position.x / UnityEditor.EditorSnapSettings.move.x);
-            coordinate.y = Mathf.RoundToInt(transform.parent.position.z / UnityEditor.EditorSnapSettings.move.z);
+            coordinate.x = Mathf.RoundToInt(transform.parent.position.x / unityGridSpacing);
+            coordinate.y = Mathf.RoundToInt(transform.parent.position.z / unityGridSpacing);
 
             label.text = coordinate.x + "," + coordinate.y;
         }

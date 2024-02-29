@@ -34,8 +34,13 @@ namespace BaseTowerDefense
             startNode = gridManager.Grid[startCoordinate];
             endNode = gridManager.Grid[endCoordinate];
 
+        }
+
+        public List<Node> GetNewPath()
+        {
+            gridManager.ResetNodes();
             BFS();
-            BuildPath();
+            return BuildPath();
         }
 
         /// <summary>
@@ -71,6 +76,9 @@ namespace BaseTowerDefense
         /// </summary>
         private void BFS()
         {
+            frontier.Clear();
+            reached.Clear();
+
             bool isRunning = true;
 
             frontier.Enqueue(startNode);
@@ -106,6 +114,25 @@ namespace BaseTowerDefense
             path.Reverse();
 
             return path;
+        }
+
+        public bool WillBlockPath(Vector2Int coordinate)
+        {
+            if (grid.ContainsKey(coordinate))
+            {
+                bool previousState = grid[coordinate].isWalkable;
+
+                grid[coordinate].isWalkable = false;
+                List<Node> newPath = GetNewPath();
+                grid[coordinate].isWalkable = previousState;
+
+                if (newPath.Count <= 1)
+                {
+                    GetNewPath();
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

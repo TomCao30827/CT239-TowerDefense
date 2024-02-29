@@ -10,6 +10,7 @@ namespace BaseTowerDefense
         [SerializeField] Vector2 gridSize;
 
         private Dictionary<Vector2Int, Node> grid = new Dictionary<Vector2Int, Node>();
+        private int unityGridSpacing = 10;
 
         public Dictionary<Vector2Int, Node> Grid { get { return grid; } }
 
@@ -31,6 +32,42 @@ namespace BaseTowerDefense
             }
 
             return null;
+        }
+
+        public void ResetNodes()
+        {
+            foreach (KeyValuePair<Vector2Int,Node> entry in grid)
+            {
+                entry.Value.connectedTo = null;
+                entry.Value.isExplored = false; 
+                entry.Value.isPath = false;
+            }
+        }
+
+        public void BlockNode(Vector2Int coordinate)
+        {
+            if (grid.ContainsKey(coordinate))
+            {
+                grid[coordinate].isWalkable = false;
+            }
+        }
+
+        public Vector2Int GetCoordinatesFromPosition (Vector3 position)
+        {
+            Vector2Int coordinate = new Vector2Int();
+            coordinate.x = Mathf.RoundToInt(position.x / unityGridSpacing);
+            coordinate.y = Mathf.RoundToInt(position.z / unityGridSpacing);
+
+            return coordinate;
+        }
+
+        public Vector3 GetPositionFromCoordinates(Vector2Int coordinate)
+        {
+            Vector3 position = new Vector3();
+            position.x = coordinate.x * unityGridSpacing;
+            position.z = coordinate.y * unityGridSpacing;
+
+            return position;
         }
 
         /// <summary>
