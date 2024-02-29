@@ -11,21 +11,24 @@ namespace BaseTowerDefense
     {
         [SerializeField] private Color defaultColor = Color.white;
         [SerializeField] private Color blockedColor = Color.red;
+        [SerializeField] private Color exploredColor = Color.yellow;
+        [SerializeField] private Color pathColor = Color.green;
 
         private TextMeshPro label;
         private Vector2Int coordinate = new Vector2Int();
-        private Waypoint waypoint;
+        private GridManager gridManager;
 
         private void Awake()
         {
+            gridManager = FindObjectOfType<GridManager>();
             label = GetComponent<TextMeshPro>();
-            label.enabled = false;
+            //label.enabled = false;
 
-            waypoint = GetComponentInParent<Waypoint>();
+            //waypoint = GetComponentInParent<Waypoint>();
             DisplayCoordinate();
         }
 
-        
+
         void Update()
         {
             if (!Application.isPlaying)
@@ -54,16 +57,33 @@ namespace BaseTowerDefense
         /// </summary>
         private void ColorCoordinate()
         {
-            if (waypoint.IsPlacable)
+            if (gridManager == null) { return; }
+
+            Node node = gridManager.GetNode(coordinate);
+
+            if (node == null) { return; }
+
+            if (!node.isWalkable)
+            {
+                label.color = blockedColor;
+            }
+
+            else if (node.isPath)
+            {
+                label.color = pathColor;
+            }
+
+            else if (node.isExplored)
+            {
+                label.color = exploredColor;
+            }
+
+            else
             {
                 label.color = defaultColor;
             }
-            else if (!waypoint.IsPlacable) 
-            {
-                label.color = blockedColor;
-            } 
-                
         }
+
 
         /// <summary>
         /// Show tile's coordinate by using tile's transform and grid snapping
