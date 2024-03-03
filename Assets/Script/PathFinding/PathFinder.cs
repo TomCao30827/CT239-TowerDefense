@@ -34,6 +34,7 @@ namespace BaseTowerDefense
             startNode = gridManager.Grid[startCoordinate];
             endNode = gridManager.Grid[endCoordinate];
 
+            GetNewPath();
         }
 
         public List<Node> GetNewPath()
@@ -134,5 +135,6 @@ namespace BaseTowerDefense
             }
             return false;
         }
+
     }
 }
